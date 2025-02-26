@@ -19,11 +19,14 @@ import com.project.gamevaultcli.storage.GameStorage;
 import com.project.gamevaultcli.storage.OrderStorage;
 import com.project.gamevaultcli.storage.TransactionStorage;
 import com.project.gamevaultcli.storage.UserStorage;
+import com.project.gamevaultcli.utils.Util;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameVaultCLI {
@@ -81,6 +84,7 @@ public class GameVaultCLI {
 
     // Inner class for the Menu
     static class Menu {
+
         private final UserManagement userManagement;
         private final GameManagement gameManagement;
         private final CartManagement cartManagement;
@@ -257,21 +261,19 @@ public class GameVaultCLI {
             try {
                 List<Game> games = gameManagement.getAllGames();
                 System.out.println("\n--- Game List ---");
-                for (Game game : games) {
-                    System.out.println(game); // Assuming Game has a decent toString()
-                }
+                List<String> columnNames = Arrays.asList("gameId", "title", "developer", "platform", "price", "description"); // Specify field names
+                Util.printTable(games, columnNames);
             } catch (Exception e) {
                 System.out.println("Error listing games: " + e.getMessage());
             }
         }
 
-        private void listUsers() { // Changed from viewUser
+        private void listUsers() {
             try {
                 List<User> users = userManagement.getAllUsers();
                 System.out.println("\n--- User List ---");
-                for (User user : users) {
-                    System.out.println("User ID: " + user.getUserId() + ", Username: " + user.getUsername() + ", Email: " + user.getEmail());
-                }
+                List<String> columnNames = Arrays.asList("userId", "username", "email", "walletBalance"); // Specify field names
+                Util.printTable(users, columnNames);
             } catch (Exception e) {
                 System.out.println("Error listing users: " + e.getMessage());
             }
@@ -285,15 +287,17 @@ public class GameVaultCLI {
 
                 List<Order> allOrders = orderManagement.getAllOrders();
                 System.out.println("\n--- Orders List ---");
+
+                List<String> columnNames = Arrays.asList("orderId", "userId", "totalAmount", "orderDate");
+                List<Order> userOrders = new ArrayList<>();
+
                 for (Order order : allOrders) {
-                    if(order.getUserId() == userId) {
-                        System.out.println("Order ID: " + order.getOrderId());
-                        System.out.println("Total Amount: " + order.getTotalAmount());
-                        System.out.println("Order Date: " + order.getOrderDate());
-                        System.out.println("Games: " + order.getGames()); //Needs to override tostring for the games
-                        System.out.println("--------------------");
+                    if (order.getUserId() == userId) {
+                        userOrders.add(order);
                     }
                 }
+                Util.printTable(userOrders, columnNames);
+
             } catch (Exception e) {
                 System.out.println("Error viewing orders: " + e.getMessage());
             }
@@ -307,15 +311,16 @@ public class GameVaultCLI {
 
                 List<Transaction> allTransactions = transactionManagement.getAllTransactions();
                 System.out.println("\n--- Transactions List ---");
+                List<String> columnNames = Arrays.asList("transactionId", "userId", "gameId", "transactionType", "amount", "transactionDate");
+                List<Transaction> userTransactions = new ArrayList<>();
+
                 for (Transaction transaction : allTransactions) {
-                    if(transaction.getUserId() == userId) {
-                        System.out.println("Transaction ID: " + transaction.getTransactionId());
-                        System.out.println("Transaction Type: " + transaction.getTransactionType());
-                        System.out.println("Amount: " + transaction.getAmount());
-                        System.out.println("Transaction Date: " + transaction.getTransactionDate());
-                        System.out.println("--------------------");
+                    if (transaction.getUserId() == userId) {
+                        userTransactions.add(transaction);
                     }
                 }
+                Util.printTable(userTransactions, columnNames);
+
             } catch (Exception e) {
                 System.out.println("Error viewing transactions: " + e.getMessage());
             }
