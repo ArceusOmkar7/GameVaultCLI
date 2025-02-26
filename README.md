@@ -19,7 +19,7 @@ The Game Vault CLI is a command-line application for managing a collection of vi
 
 ### 🚧 To Do
 
-*   [ ] Implement proper `toString()` methods: Ensure all entities (Game, User, Order, Transaction) have `toString()` methods that provide a clear and detailed representation of their data.
+*   [x] Implement proper `toString()` methods: Ensure all entities (Game, User, Order, Transaction) have `toString()` methods that provide a clear and detailed representation of their data.
 *   [ ] Implement robust error handling: Improve the robustness of error handling in menu options, providing more informative messages and handling edge cases.
 *   [ ] Implement Cart Management Operations: Add methods to the menu to add game to cart, remove game from cart, list items in cart.
 *   [ ] Implement Order Management Operations: Add method to the menu to view Order details, by searching for orderId
